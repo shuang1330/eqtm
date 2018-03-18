@@ -169,7 +169,7 @@ if __name__=='__main__':
     'X._H3K4me1_gapedPeaks','X._H3K4me3_gapedPeaks','X._H3K27ac_gapedPeaks']
     # features.append('zscore') # output
 
-    def read_useful_features(path,features):
+    def read_useful_features(path,features,SAVE=False):
         all_data = pd.read_csv(path,sep='\t')
         def binarize(row):
             if row > 0:
@@ -178,9 +178,14 @@ if __name__=='__main__':
                 return 0
         all_data['direction'] = all_data['zscore'].apply(binarize)
         features.append('direction')
+        if SAVE:
+            all_data[features].to_csv('mj_data/only_ratio_as_features.csv')
+            print('saved data to mj_data/only_ratio_as_features.csv')
         eqtm_data = read_data_set(all_data[features])
         return eqtm_data
-    eqtm_data = read_useful_features('mj_data/Anno_Value_Direction.csv',features)
+    eqtm_data = read_useful_features('mj_data/Anno_Value_Direction.csv',
+                                     features,
+                                     SAVE=True)
     # mvid,train_gavin, test_gavin = read_data_set(data,BENCHMARK=True)
     # print(data.head())
     # raise NotImplementedError # check the dataset loaded
@@ -200,12 +205,12 @@ if __name__=='__main__':
     # Parameters
     n_components = np.arange(2,eqtm_data.train.num_features,10)
     class_weight = ['balanced',{1:4,0:1},{1:2,0:1}]
-    param_grid_logr = [{#'pca__n_components':n_components,
+    param_grid_logr = [{'pca__n_components':n_components,
                    'logr__penalty':['l1','l2'],
                    'logr__C':[1,2,3,4,5],
                    'logr__class_weight':class_weight}]
     # pipeline
-    pipeline_logr = Pipeline(steps=[#('pca',PCA()),
+    pipeline_logr = Pipeline(steps=[('pca',PCA()),
                                ('logr',LogisticRegression())])
     # save model
     # filename = os.path.join('model','pca_logr.sav')
@@ -229,10 +234,10 @@ if __name__=='__main__':
     #                                  mvid)
 
     # # PCA + RandomForest
-    pipeline_ranfor = Pipeline(steps=[#('pca',PCA()),
+    pipeline_ranfor = Pipeline(steps=[('pca',PCA()),
                                       ('ranfor',RandomForestClassifier())])
     n_estimators = [10,50,100]
-    param_grid_ranfor = [{#'pca__n_components':n_components,
+    param_grid_ranfor = [{'pca__n_components':n_components,
                           'ranfor__n_estimators':n_estimators,
                           'ranfor__class_weight':class_weight}]
     # filename = os.path.join('model','pca_ranfor.sav')

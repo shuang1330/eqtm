@@ -14,7 +14,6 @@ if __name__=='__main__':
         return list(row)
     grouped_df = pd.DataFrame(bedtools_res.groupby(7)[3].apply(create_list).reset_index())
     grouped_df = grouped_df.rename(index=str,columns={7:'cg',3:'feature'})
-    # print(grouped_df)
     overlap_matrix = grouped_df[['cg']].join(grouped_df['feature'].str.join('|').str.get_dummies())
 
     # add the value to the overlap_matrix

@@ -7,6 +7,7 @@ from math import copysign
 
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
+from sklearn import preprocessing
 
 # feature extractors
 from sklearn.decomposition import PCA
@@ -17,6 +18,7 @@ from sklearn.ensemble import RandomForestClassifier,AdaBoostClassifier
 from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.gaussian_process import GaussianProcessClassifier
+from sklearn.tree import DecisionTreeClassifier
 # finetuning
 from sklearn.model_selection import GridSearchCV
 # validation
@@ -25,7 +27,7 @@ from sklearn.metrics import confusion_matrix
 
 # import matplotlib.pyplot as plt
 # TODO: support matplotlib drawing
-def read_data_set(data_table,test_size=0.25):
+def read_data_set(data_table,test_size=0.25,normalization=True):
     '''
     convert a pandas dataframe data table into Datasets(dataset,dataset)
     '''
@@ -33,8 +35,15 @@ def read_data_set(data_table,test_size=0.25):
     train_x = train[[col for col in train.columns
                      if col not in ['zscore','direction','cpgName']]]
     features = train_x.columns
-    train_x = np.array(train_x)
-    test_x = np.array(test[[col for col in train.columns
+    if normalization:
+        minMaxScaler = preprocessing.MinMaxScaler()
+        train_x = minMaxScaler.fit_transform(train_x)
+        test_x = minMaxScaler.fit_transform(test[[col for col in
+                                                  train.columns
+                      if col not in ['zscore','direction','cpgName']]])
+    else:
+        train_x = np.array(train_x)
+        test_x = np.array(test[[col for col in train.columns
                       if col not in ['zscore','direction','cpgName']]])
     train_y = np.array(train['direction'],dtype=np.int8)
     test_y = np.array(test['direction'],dtype=np.int8)
@@ -132,7 +141,7 @@ def display_res_gavin_and_elasticnet(param_grid,pipeline,mvid,filename=None):
 if __name__=='__main__':
 
     def load_bonderWestraData(path):
-        data = pd.read_csv(bonder_path,sep=',')
+        data = pd.read_csv(path,sep=',')
         # print(data.head())
         def binarize(row):
             if row > 0:
@@ -143,8 +152,9 @@ if __name__=='__main__':
         dataset = read_data_set(data)
         return dataset
 
+
     bonder_path = 'data/bonder_withzscore.csv'
-    westra_allFeat_path = 'data/westra_all_with_zscore.csv.csv'
+    westra_allFeat_path = 'data/westra_all_with_zscore.csv'
     westra_bonderFeat_path = 'data/westra_bonderfeat_with_zscore.csv'
 
     bonder = load_bonderWestraData(bonder_path)
@@ -152,9 +162,9 @@ if __name__=='__main__':
     westra_bonderFeat = load_bonderWestraData(westra_bonderFeat_path)
 
     print('Bonder dataset loaded.',bonder.train.values.shape)
-    print('Westra with all features dataset loaded.',bonder.train.values.shape)
+    print('Westra with all features dataset loaded.',westra_allFeat.train.values.shape)
     print('Westra with bonder features dataset loaded.',
-           bonder.train.values.shape)
+           westra_bonderFeat.train.values.shape)
 
     for eqtm_data in [bonder,westra_allFeat,westra_bonderFeat]:
             print('Dataset:', eqtm_data.train.values.shape)
@@ -173,6 +183,7 @@ if __name__=='__main__':
             pipeline_ranfor = Pipeline(steps=[('ranfor',
                                        RandomForestClassifier())])
             n_estimators = [10,50,100]
+            class_weight = ['balanced',{1:4,0:1},{1:2,0:1}]
             param_grid_ranfor = [{'ranfor__n_estimators':n_estimators,
                                   'ranfor__class_weight':class_weight}]
             classifier_ranfor = display_res_gavin_and_best_model(
@@ -209,17 +220,20 @@ if __name__=='__main__':
         # ====================SVM===============================================
             pipeline_svc = Pipeline(steps=[('svc',SVC())])
             C = [0.5,1,2,3]
-            kernel = ['linear','poly','rbf','sigmoid','precomputed']
+            kernel = ['linear','poly','rbf','sigmoid']
             class_weight = ['balanced',{1:4,0:1},{1:2,0:1}]
+            probability = [True]
             param_grid_svc = [{'svc__kernel':kernel,
-                                  'svc__class_weight':class_weight}]
+                               'svc__class_weight':class_weight,
+                               'svc__probability':probability}]
             classifier_svc = display_res_gavin_and_best_model(param_grid_svc,
                                              pipeline_svc,
                                              eqtm_data)
-        # ====================Adaboost=================================================
-            pipeline_ada = Pipeline(steps=[('ada',SVC())])
-            base_estimator = [DecisionTreeClassifier,LogisticRegression]
+        # ====================Adaboost==========================================
+            pipeline_ada = Pipeline(steps=[('ada',AdaBoostClassifier())])
+            base_estimator = [DecisionTreeClassifier()]
             param_grid_ada = [{'ada__base_estimator':base_estimator}]
-            classifier_ada = display_res_gavin_and_best_model(param_grid_ada,
+            classifier_ada = display_res_gavin_and_best_model(
+                                             param_grid_ada,
                                              pipeline_ada,
                                              eqtm_data)

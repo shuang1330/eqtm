@@ -4,8 +4,7 @@ shallow network
 
 import pandas as pd
 import os
-# import tensorflow.contrib.slim as slim
-# import tensorflow.contrib.layers as lays
+
 import tensorflow as tf
 from math import ceil
 import numpy as np
@@ -13,9 +12,9 @@ from lib.read_data import dataset,Datasets
 from lib.net import autoencoder,feedforward_net
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
+from copy import copy
+from sklearn import preprocessing
 
-# from sklearn.linear_model import LogisticRegression
-# from sklearn.ensemble import RandomForestClassifier
 
 def dense_to_one_hot(labels_dense, num_classes):
   '''
@@ -23,17 +22,24 @@ def dense_to_one_hot(labels_dense, num_classes):
   '''
   return np.eye(num_classes)[np.array(labels_dense).reshape(-1)]
 
-def read_data_set(data_table,test_size=0.25):
+def read_data_set(data_table,test_size=0.25,normalization=True):
     '''
     convert a pandas dataframe data table into Datasets(dataset,dataset)
     '''
     train, test = train_test_split(data_table,test_size=0.25)
     train_x = train[[col for col in train.columns
-                     if col not in ['zscore','direction']]]
+                     if col not in ['zscore','direction','cpgName']]]
     features = train_x.columns
-    train_x = np.array(train_x)
-    test_x = np.array(test[[col for col in train.columns
-                      if col not in ['zscore','direction']]])
+    if normalization:
+        minMaxScaler = preprocessing.MinMaxScaler()
+        train_x = minMaxScaler.fit_transform(train_x)
+        test_x = minMaxScaler.fit_transform(test[[col for col in
+                                                  train.columns
+                      if col not in ['zscore','direction','cpgName']]])
+    else:
+        train_x = np.array(train_x)
+        test_x = np.array(test[[col for col in train.columns
+                      if col not in ['zscore','direction','cpgName']]])
     train_y = np.array(train['direction'],dtype=np.int8)
     test_y = np.array(test['direction'],dtype=np.int8)
 
@@ -43,38 +49,34 @@ def read_data_set(data_table,test_size=0.25):
 
 if __name__=='__main__':
 
-    features = ['X._H2A.Z_imputed_gappedPeaks','X._H2AK5ac_imputed_gappedPeaks',\
-    'X._H2AK9ac_imputed_gappedPeaks','X._H2BK120ac_imputed_gappedPeaks',\
-    'X._H2BK12ac_imputed_gappedPeaks','X._H2BK5ac_imputed_gappedPeaks',\
-    'X._H3K14ac_imputed_gappedPeaks','X._H3K18ac_imputed_gappedPeaks',\
-    'X._H3K23ac_imputed_gappedPeaks','X._H3K23me2_imputed_gappedPeaks',\
-    'X._H3K27ac_imputed_gappedPeaks','X._H3K4ac_imputed_gappedPeaks',\
-    'X._H3K4me1_imputed_gappedPeaks','X._H3K4me2_imputed_gappedPeaks',\
-    'X._H3K4me3_imputed_gappedPeaks','X._H3K79me1_imputed_gappedPeaks',\
-    'X._H3K79me2_imputed_gappedPeaks','X._H3K9ac_imputed_gappedPeaks',\
-    'X._H3T11ph_imputed_gappedPeaks','X._H4K12ac_imputed_gappedPeaks',\
-    'X._H4K5ac_imputed_gappedPeaks','X._H4K8ac_imputed_gappedPeaks',\
-    'X._H4K91ac_imputed_gappedPeaks','X._H3K36me3_imputed_gappedPeaks',\
-    'X._H3K9me3_imputed_gappedPeaks','X._H4K20me1_imputed_gappedPeaks',\
-    'X._H3K27me3_imputed_gappedPeaks','X._H3K56ac_imputed_gappedPeaks',\
-    'X._H2BK15ac_imputed_gappedPeaks','X._H2BK20ac_imputed_gappedPeaks',\
-    'X._H3K9me1_imputed_gappedPeaks','X._H3K27me3_gapedPeaks',\
-    'X._H3K36me3_gapedPeaks','X._H3K9me3_gapedPeaks',\
-    'X._H3K4me1_gapedPeaks','X._H3K4me3_gapedPeaks','X._H3K27ac_gapedPeaks']
-    # features.append('zscore') # output
-
-    def read_useful_features(path,features):
-        all_data = pd.read_csv(path,sep='\t')
+    def load_bonderWestraData(path):
+        data = pd.read_csv(path,sep=',')
+        # print(data.head())
         def binarize(row):
             if row > 0:
                 return 1
             else:
                 return 0
-        all_data['direction'] = all_data['zscore'].apply(binarize)
-        features.append('direction')
-        eqtm_data = read_data_set(all_data[features])
-        return eqtm_data
-    eqtm = read_useful_features('mj_data/Anno_Value_Direction.csv',features)
+        data['direction'] = data['zscore'].apply(binarize)
+        dataset = read_data_set(data)
+        return dataset
+
+
+    bonder_path = 'data/bonder_withzscore.csv'
+    westra_allFeat_path = 'data/westra_all_with_zscore.csv'
+    westra_bonderFeat_path = 'data/westra_bonderfeat_with_zscore.csv'
+
+    bonder = load_bonderWestraData(bonder_path)
+    westra_allFeat = load_bonderWestraData(westra_allFeat_path)
+    westra_bonderFeat = load_bonderWestraData(westra_bonderFeat_path)
+
+    print('Bonder dataset loaded.',bonder.train.values.shape)
+    print('Westra with all features dataset loaded.',westra_allFeat.train.values.shape)
+    print('Westra with bonder features dataset loaded.',
+           westra_bonderFeat.train.values.shape)
+
+    # change eqtm into bonder/westra_allFeat/westra_bonderFeat
+    eqtm = copy(bonder)
 
 
     train_fn = eqtm.train
@@ -82,7 +84,7 @@ if __name__=='__main__':
 
     # constant
     batch_size = 100
-    epoch_num = 30
+    epoch_num = 100
     lr = 0.01
 
     batch_per_ep = ceil(train_fn.num_examples/batch_size)

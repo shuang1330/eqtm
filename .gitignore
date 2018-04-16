@@ -3,4 +3,10 @@ corrunpted/*
 mj_data/*
 output/*
 Roadmap/*
+*.pyc
+.ipynb_checkpoints/*
+MNIST_data/*
+checkpoint
+projector/*
+projector_withNonLinear/*
 *.txt

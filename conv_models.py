@@ -22,7 +22,8 @@ from sklearn import metrics
 from sklearn.metrics import confusion_matrix
 
 # import matplotlib.pyplot as plt
-# TODO: support matplotlib drawing
+# TODO ElasticNet
+
 
 def read_data_set(data_table,test_size=0.25):
     '''

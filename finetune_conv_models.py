@@ -27,6 +27,9 @@ from sklearn.metrics import confusion_matrix
 
 # import matplotlib.pyplot as plt
 # TODO: support matplotlib drawing
+
+PROJECT_DIR = '/home/shuang/projects/eqtm'
+
 def read_data_set(data_table,test_size=0.25,normalization=True):
     '''
     convert a pandas dataframe data table into Datasets(dataset,dataset)
@@ -235,7 +238,13 @@ if __name__=='__main__':
            # westra_bonderFeat.train.values.shape)
 
     # calculateKnnVariance(bonder_path)
-    calculateRanforVariance(bonder_path)
+    # calculateRanforVariance(bonder_path)
+
+    # try the cpg sites with fdr==0
+    et_path = os.path.join(PROJECT_DIR,'data',
+    'dataReadyForModeling','gtCpG_withZscoreTss.csv')
+    calculateRanforVariance(et_path)
+
     # for eqtm_data in [bonder,westra_allFeat,westra_bonderFeat]:
     #         print('Dataset:', eqtm_data.train.values.shape)
     #     # ================LogisticRegression====================================

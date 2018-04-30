@@ -1,3 +1,6 @@
+bedFiles/eqtms_et.bed
+paper_data/*
+.Rhistory.csv
 data/*
 corrunpted/*
 mj_data/*

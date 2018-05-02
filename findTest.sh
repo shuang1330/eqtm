@@ -33,11 +33,9 @@ name=$(basename "$featurename" .imputed.narrowPeak.bed.nPk.gz)
 export savefeaturename=$TEMP_FEATURE/$featurename.bed
 # echo "processing feature:"$featurename
 gzip -dc $FEATURES/$featurename.imputed.narrowPeak.bed.nPk.gz > $savefeaturename
-echo "Saved the intermediate results to "$savefeaturename
 
 # bedtools_intersect_output
-bedtools intersect -sorted -a $savefeaturename -b $cpgfilename -wa -wb > $TEMP_OUTPUT/$featurename.bedtoolsIntersect.txt
-echo "Saved results to "$TEMP_OUTPUT/$featurename.bedtoolsIntersect.txt
+bedtools intersect -sorted -a $cpgfilename -b $savefeaturename -wa -wb > $TEMP_OUTPUT/$featurename.bedtoolsIntersect.txt
 
 # remove the unzipped file
-# rm $savefeaturename
+rm $savefeaturename

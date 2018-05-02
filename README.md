@@ -37,4 +37,8 @@ Sensitivity: 0.5119424094973878 0.015669131423281392
 Specificity: 0.8603116428673548 0.0024415519870774026
 AUC: 0.8078494912694445 0.004256705611510144
 
+# train on each other datasets and test
+# removing features from blood cell types
+
+
 ## eQTM - gt 0.05

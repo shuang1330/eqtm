@@ -7,10 +7,10 @@ import shlex, subprocess
 def isEmpty(path):
     return os.stat(path).st_size==0
 
-def readFeatureList(feature_folder,feature_list_filename):
+def readFeatureList(temp_meta,feature_folder,feature_list_filename):
     feature_list = []
     # feature_list_filename = 'feature_list'
-    feature_list_path = os.path.join(feature_folder,
+    feature_list_path = os.path.join(temp_meta,
                                      feature_list_filename+'.txt')
     if os.path.exists(feature_list_filename):
         with open(feature_list_path,'r') as f:
@@ -21,23 +21,23 @@ def readFeatureList(feature_folder,feature_list_filename):
             print('There should not be a item called feature list.')
     else:
         # create and save a feature list
-        feature_list_savepath = os.path.join(feature_folder,
+        feature_list_savepath = os.path.join(temp_meta,
                                              feature_list_filename+'.txt')
         feature_f = open(feature_list_savepath,'w')
         for name in os.listdir(feature_folder):
             if name.endswith('gz'):
-                feature_name = '.'.join(name.split('.')[:-5])
+                feature_name = '.'.join(name.split('.')[:-5]) # needs to be changed
                 feature_list.append(feature_name)
-                feature_f.write('%s\n'%feature_name) # write to a feature list file
+                feature_f.write('%s\n'%feature_name)
         feature_f.close()
         print('Saved feature list to path: \n%s'%feature_list_savepath)
 
     return feature_list
 
-def readHistoneList(histone_folder,histone_list_filename,feature_list):
+def readHistoneList(temp_meta,histone_list_filename,feature_list):
     histone_list = []
     # histone_list_filename = 'histone_list'
-    histone_list_path = os.path.join(histone_folder,'histone_list.txt')
+    histone_list_path = os.path.join(temp_meta,'histone_list.txt')
     if os.path.exists(histone_list_path):
         with open(histone_list_path,'r') as f:
             for line in f.readlines():
@@ -46,7 +46,7 @@ def readHistoneList(histone_folder,histone_list_filename,feature_list):
         print('Read histone list from path: \n',histone_list_path)
         print(histone_list)
     else:
-        histone_list_savepath = os.path.join(histone_folder,
+        histone_list_savepath = os.path.join(temp_meta,
                                              histone_list_filename+'.txt')
         for col in feature_list:
             histone = col.split('-')[1]
@@ -60,10 +60,10 @@ def readHistoneList(histone_folder,histone_list_filename,feature_list):
 
     return histone_list
 
-def readCellList(cell_folder,cell_list_filename,feature_list):
+def readCellList(temp_meta,cell_list_filename,feature_list):
     cell_list = []
     # cell_list_filename = 'cell_list'
-    cell_list_path = os.path.join(cell_folder,'cell_list.txt')
+    cell_list_path = os.path.join(temp_meta,'cell_list.txt')
     if os.path.exists(cell_list_filename):
         with open(cell_list_path,'r') as f:
             for line in f.readlines():
@@ -73,7 +73,7 @@ def readCellList(cell_folder,cell_list_filename,feature_list):
         print(cell_list)
     else:
         # create and save a cell type list
-        cell_list_savepath = os.path.join(cell_folder,
+        cell_list_savepath = os.path.join(temp_meta,
                                           cell_list_filename+'.txt')
         for col in feature_list:
             cell = col.split('-')[0]
@@ -186,10 +186,10 @@ def overlapMatrixPipeline(PROJECT_DIR,execute_bedtoolFilename,
              histone_folder,histone_list_filename,
              temp_cpgFolder,cpg_folder,cpg_filename,
              temp_output,temp_output_withcpgName,ratio_folder,
-             cell_list_filename):
-    feature_list = readFeatureList(feature_folder,feature_list_filename)
-    print(feature_list)
-    histone_list = readHistoneList(feature_folder,histone_list_filename,feature_list)
+             cell_list_filename,temp_meta):
+    feature_list = readFeatureList(temp_meta,feature_folder,feature_list_filename)
+    # print(feature_list)
+    histone_list = readHistoneList(temp_meta,histone_list_filename,feature_list)
     cell_list = readCellList(feature_folder,cell_list_filename,feature_list)
     _ = readCpgFileInbedToolsFormat(temp_cpgFolder,cpg_folder,cpg_filename)
     callBedtools(PROJECT_DIR,execute_bedtoolFilename,

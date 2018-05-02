@@ -17,12 +17,14 @@ def initFolders(cpg_filename,
     ratio_folder = os.path.join(DATA_ROOTDIR,'data','overlapRatio')
     # folder for intermediate results
     temp_folder = os.path.join(PROJECT_DIR,'data','temp')
+    temp_meta = os.apth.jion(temp_folder,'meta')
     temp_cpgFolder = os.path.join(temp_folder,'cpg')
     # temp_featureFolder = os.path.join(temp_folder,'features')
     temp_output = os.path.join(temp_folder,'output')
     output_withcpgName = os.path.join(PROJECT_DIR,'data','output',cpg_filename)
     folder_lists = [ratio_folder,
                     temp_folder,
+                    temp_meta,
                     temp_cpgFolder,
                     temp_output,
                     output_withcpgName]
@@ -68,25 +70,18 @@ def startBuild(PROJECT_DIR,
                temp_cpgFolder,
                cpg_folder,
                ratio_folder,
+               temp_meta,
                feature_list_filename='feature_list',
                histone_list_filename='histone_list',
                cell_list_filename='cell_list',
                execute_bedtoolFilename='findOverlap',
                cpg_filename='bonder-eQTMsFDR0.0-CpGLevel-split'):
-    # print(cpg_folder)
-    overlapMatrixPipeline(PROJECT_DIR,
-                          execute_bedtoolFilename,
-                          feature_folder,
-                          feature_list_filename,
-                          histone_folder,
-                          histone_list_filename,
-                          temp_cpgFolder,
-                          cpg_folder,
-                          cpg_filename,
-                          temp_output,
-                          output_withcpgName,
-                          ratio_folder,
-                          cell_list_filename)
+    overlapMatrixPipeline(PROJECT_DIR,execute_bedtoolFilename,
+                 feature_folder,feature_list_filename,
+                 histone_folder,histone_list_filename,
+                 temp_cpgFolder,cpg_folder,cpg_filename,
+                 temp_output,output_withcpgName,ratio_folder,
+                 cell_list_filename,temp_meta)
 
 
 if __name__=='__main__':
@@ -97,8 +92,9 @@ if __name__=='__main__':
     print(args)
 
     PROJECT_DIR,feature_folder,cpg_folder,ratio_folder,temp_cpgFolder,\
-    temp_output,output_withcpgName = \
+    temp_output,output_withcpgName,temp_meta = \
     initFolders(args.cpg_filename)
+    print('the temp meta folder is in ',temp_meta)
 
     # print(cpg_folder)
     startBuild(PROJECT_DIR,
@@ -108,4 +104,5 @@ if __name__=='__main__':
                output_withcpgName,
                temp_cpgFolder,
                cpg_folder,
-               ratio_folder)
+               ratio_folder,
+               temp_meta)

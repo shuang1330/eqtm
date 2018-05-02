@@ -17,7 +17,7 @@ def initFolders(cpg_filename,
     ratio_folder = os.path.join(DATA_ROOTDIR,'data','overlapRatio')
     # folder for intermediate results
     temp_folder = os.path.join(PROJECT_DIR,'data','temp')
-    temp_meta = os.apth.jion(temp_folder,'meta')
+    temp_meta = os.path.join(temp_folder,'meta')
     temp_cpgFolder = os.path.join(temp_folder,'cpg')
     # temp_featureFolder = os.path.join(temp_folder,'features')
     temp_output = os.path.join(temp_folder,'output')

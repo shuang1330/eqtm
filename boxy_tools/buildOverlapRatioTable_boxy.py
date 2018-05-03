@@ -1,3 +1,4 @@
+import __init__path
 import os
 import argparse
 from lib.preprocess.createOverlapRatioMatrix import overlapMatrixPipeline
@@ -12,7 +13,7 @@ def initFolders(cpg_filename,
     feature_folder = os.path.join(DATA_ROOTDIR,
                                   'features',
                                   'Roadmap',
-                                  'consolidatedNarrowPeak')
+                                  'consolidatedImputedGappedPeak')
     cpg_folder = os.path.join(DATA_ROOTDIR,'data','eqtmZscores')
     ratio_folder = os.path.join(DATA_ROOTDIR,'data','overlapRatio')
     # folder for intermediate results
@@ -33,7 +34,7 @@ def initFolders(cpg_filename,
             os.makedirs(folder)
     print('Init folders.')
     return PROJECT_DIR,feature_folder,cpg_folder,ratio_folder,temp_cpgFolder,\
-    temp_output,output_withcpgName
+    temp_output,output_withcpgName,temp_meta
 
 def parse_args():
     """

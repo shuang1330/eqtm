@@ -41,5 +41,8 @@ echo "Saved the intermediate results to "$savefeaturename
 bedtools intersect -sorted -a $savefeaturename -b $cpgfilename -wa -wb > $TEMP_FEATURE/$featurename.bedtoolsIntersect.txt
 echo "Saved results to "$TEMP_FEATURE/$featurename.bedtoolsIntersect.txt
 
+# return exit code
+
+
 # remove the bed file
 rm $savefeaturename

@@ -145,7 +145,7 @@ def buildRatioMatrix(dirs,histone_list,feature_list,cell_list):
             res.loc[test_intersectFile['cpgName'],
                     test_intersectFile['featureName']]=1
             save_path = os.path.join(dirs.temp_overlap,
-                                     intersect_rawPath)
+                                     intersect_raw)
             test_intersectFile.to_csv(save_path,
                                       index=False,
                                       header=False)

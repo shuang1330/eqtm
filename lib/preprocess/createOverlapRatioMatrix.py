@@ -1,3 +1,10 @@
+#TODO looking into the /dev/shm
+#TODO parallize
+#TODO time it
+#TODO maybe just removing the save operating would speed it up
+#TODO or I can just make each column a row and each row can be directly cat into a txt file
+#     finally I just transpose the txt file into a matrix
+
 import os
 import numpy as np
 import pandas as pd
@@ -11,11 +18,12 @@ def readFeatureList(dirs):
     feature_list = []
     feature_list_path = os.path.join(dirs.temp_meta,
                                      dirs.feature_list_filename+'.txt')
-    if os.path.exists(dirs.feature_list_filename):
+    if os.path.exists(feature_list_path):
         with open(feature_list_path,'r') as f:
             for line in f.readlines():
                 feature_list.append(line.strip())
             f.close()
+        print('Read feature list from path: \n',feature_list_path)
         if 'feature_list' in feature_list:
             print('There should not be a item called feature list.')
     else:
@@ -57,7 +65,8 @@ def readCellList(temp_meta,cell_list_filename,feature_list):
     cell_list = []
     cell_list_filename = 'cell_list'
     cell_list_path = os.path.join(temp_meta,cell_list_filename+'.txt')
-    if os.path.exists(cell_list_filename):
+    # cell_list_path = os.path.join(temp_meta,'cell_list.txt')
+    if os.path.exists(cell_list_path):
         with open(cell_list_path,'r') as f:
             for line in f.readlines():
                 cell_list.append(line.strip())
@@ -96,7 +105,7 @@ def readCpgFileInbedToolsFormat(dirs):
                                               sep='\t')
     print('Saved the cpg file in bedtools format in path: \n%s'%cpg_bedtoolFormat_path)
     # check the saved cpg file
-    def check_cpg():
+    def check_cpg():Empty
         check_cpg = pd.read_csv(cpg_bedtoolFormat_path,sep='\t',header=None)
         print('Hey, please check the saved file:\n',check_cpg.head())
     check_cpg()
@@ -130,7 +139,8 @@ def buildRatioMatrix(dirs,histone_list,feature_list,cell_list):
     res = pd.DataFrame(data=0,
                        index=cpg['SNPName'],
                        columns=feature_list,
-                       dtype=np.int8)
+                       dtype=np.int8) # boolean/short/..
+
     for intersect_raw in os.listdir(dirs.temp_featureFolder):
         intersect_rawPath = os.path.join(dirs.temp_featureFolder,
                                          intersect_raw)
@@ -144,11 +154,11 @@ def buildRatioMatrix(dirs,histone_list,feature_list,cell_list):
             test_intersectFile.apply(mapStartEndPosition,axis=1)
             res.loc[test_intersectFile['cpgName'],
                     test_intersectFile['featureName']]=1
-            save_path = os.path.join(dirs.temp_overlap,
-                                     intersect_raw)
-            test_intersectFile.to_csv(save_path,
-                                      index=False,
-                                      header=False)
+            # save_path = os.path.join(dirs.temp_overlap,
+            #                          intersect_raw)
+            # test_intersectFile.to_csv(save_path,
+            #                           index=False,
+            #                           header=False)
         else:
             print('Empty File: ',intersect_raw)
 

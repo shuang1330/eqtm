@@ -3,14 +3,14 @@ import os
 # boxy
 
 class directoryBoxy:
-    def __init__(self,PROJECT_ROOTDIR,DATA_ROOTDIR,cpg_filename):
+    def __init__(self,PROJECT_DIR,DATA_ROOTDIR,cpg_filename):
         self.project_rootdir = PROJECT_DIR
         self._data_rootdir = DATA_ROOTDIR
         self.feature_folder = os.path.join(self._data_rootdir,
                                            'features',
-                                           'Roadmaps',
+                                           'Roadmap',
                                            'consolidatedImputedGappedPeak')
-        self.cpg_folder = os.path.join(self._data_folder,'eqtms','final')
+        self.cpg_folder = os.path.join(self._data_rootdir,'eqtms','final')
         self.cpg_filename = cpg_filename
         self.feature_list_filename = self.cpg_filename+'_featureList'
         self.histone_list_filename = self.cpg_filename+'_histoneList'

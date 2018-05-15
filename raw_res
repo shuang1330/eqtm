@@ -1,0 +1,85 @@
+Analyzing the et file.
+
+Not using features: ['cpgName', 'cpgName_split', 'TSS_Distance', 'methyMean', 'methyVar']
+>>> best model results: sensitivity: 0.612	specificity: 0.971	auc:0.9447945205479452
+>>> test on another dataset: sensitivity: 0.243	specificity: 0.914	auc:0.7166263597737208
+>>> best model results: sensitivity: 0.551	specificity: 0.968	auc:0.9317697494381086
+>>> test on another dataset: sensitivity: 0.217	specificity: 0.929	auc:0.7146034185145811
+>>> best model results: sensitivity: 0.557	specificity: 0.958	auc:0.9200309877866136
+>>> test on another dataset: sensitivity: 0.231	specificity: 0.922	auc:0.7191549039731381
+>>> best model results: sensitivity: 0.509	specificity: 0.968	auc:0.9229687994931898
+>>> test on another dataset: sensitivity: 0.23	specificity: 0.918	auc:0.7104066170482753
+Sensitivity: 0.23031105429615273 0.009155572233217798 0.23031105429615273 0.009155572233217798
+Specificity: 0.9206939960163107 0.00532591084869595 0.9206939960163107 0.00532591084869595
+AUC: 0.9298910143164644 0.009627841462108875 0.9298910143164644 0.009627841462108875
+>>> best model results: sensitivity: 0.624	specificity: 0.925	auc:0.8746617734958964
+>>> best model results: sensitivity: 0.613	specificity: 0.930	auc:0.8928546586155155
+>>> best model results: sensitivity: 0.738	specificity: 0.918	auc:0.8677557175981244
+>>> best model results: sensitivity: 0.686	specificity: 0.921	auc:0.8857314678448699
+Sensitivity: 0.6651881930373851 0.05055076753814006
+Specificity: 0.9233698509364243 0.004438797022531689
+AUC: 0.8802509043886015 0.009698701890914846
+
+
+Not using features: ['cpgName', 'cpgName_split', 'methyMean', 'methyVar']
+>>> best model results: sensitivity: 0.588	specificity: 0.958	auc:0.924799471860043
+3965 434 2009 706
+>>> test on another dataset: sensitivity: 0.26	specificity: 0.901	auc:0.7073277159508461
+>>> best model results: sensitivity: 0.547	specificity: 0.964	auc:0.9241916879700101
+>>> test on another dataset: sensitivity: 0.21	specificity: 0.931	auc:0.7057206023903103
+>>> best model results: sensitivity: 0.606	specificity: 0.959	auc:0.929783123203533
+>>> test on another dataset: sensitivity: 0.23	specificity: 0.918	auc:0.7151118421868056
+>>> best model results: sensitivity: 0.582	specificity: 0.958	auc:0.9233717907808491
+>>> test on another dataset: sensitivity: 0.227	specificity: 0.926	auc:0.717748197020367
+Sensitivity: 0.231861246847401 0.01792657087569302 0.231861246847401 0.01792657087569302
+Specificity: 0.9192671144331843 0.011409685020798133 0.9192671144331843 0.011409685020798133
+AUC: 0.9255365184536088 0.0025035726727016317 0.9255365184536088 0.0025035726727016317
+>>> best model results: sensitivity: 0.691	specificity: 0.928	auc:0.8985514472232196
+>>> best model results: sensitivity: 0.638	specificity: 0.933	auc:0.8955346067574603
+>>> best model results: sensitivity: 0.654	specificity: 0.933	auc:0.8938760575804964
+>>> best model results: sensitivity: 0.619	specificity: 0.939	auc:0.9089014086297239
+Sensitivity: 0.6505454592216497 0.026552771018600017
+Specificity: 0.9332688290916814 0.004203655698697328
+AUC: 0.8992158800477251 0.00583773097851669
+Not using features: ['cpgName', 'cpgName_split', 'TSS_Distance']
+>>> best model results: sensitivity: 0.564	specificity: 0.962	auc:0.9277708267342414
+>>> test on another dataset: sensitivity: 0.246	specificity: 0.910	auc:0.7145192151767464
+>>> best model results: sensitivity: 0.559	specificity: 0.968	auc:0.9247566739919119
+>>> test on another dataset: sensitivity: 0.185	specificity: 0.937	auc:0.7159434480105977
+>>> best model results: sensitivity: 0.545	specificity: 0.963	auc:0.9301646624804777
+>>> test on another dataset: sensitivity: 0.253	specificity: 0.901	auc:0.7152840618355488
+>>> best model results: sensitivity: 0.6	specificity: 0.952	auc:0.9224628527630571
+>>> test on another dataset: sensitivity: 0.253	specificity: 0.904	auc:0.7111765052021899
+Sensitivity: 0.23417782019342226 0.028530229441416213 0.23417782019342226 0.028530229441416213
+Specificity: 0.9131156251175017 0.01433004206648725 0.9131156251175017 0.01433004206648725
+AUC: 0.9262887539924219 0.002924209105238776 0.9262887539924219 0.002924209105238776
+>>> best model results: sensitivity: 0.685	specificity: 0.929	auc:0.8762859306564558
+>>> best model results: sensitivity: 0.681	specificity: 0.936	auc:0.8862597215599965
+>>> best model results: sensitivity: 0.599	specificity: 0.927	auc:0.8803473645471793
+>>> best model results: sensitivity: 0.642	specificity: 0.935	auc:0.9081321490232002
+Sensitivity: 0.651770211605688 0.034735105833978985
+Specificity: 0.931515858624186 0.00385272123994321
+AUC: 0.8877562914467079 0.012286951085037533
+
+
+
+Not using features: ['cpgName', 'cpgName_split']
+>>> best model results: sensitivity: 0.589	specificity: 0.966	auc:0.9291146753765002
+>>> test on another dataset: sensitivity: 0.241	specificity: 0.906	auc:0.7102306247591502
+>>> best model results: sensitivity: 0.557	specificity: 0.965	auc:0.9088721142995582
+>>> test on another dataset: sensitivity: 0.245	specificity: 0.919	auc:0.7076530813963618
+>>> best model results: sensitivity: 0.603	specificity: 0.959	auc:0.924001640519541
+>>> test on another dataset: sensitivity: 0.252	specificity: 0.897	auc:0.7006407350500727
+>>> best model results: sensitivity: 0.573	specificity: 0.958	auc:0.9261701749711342
+>>> test on another dataset: sensitivity: 0.274	specificity: 0.907	auc:0.7133644124523981
+Sensitivity: 0.2528913084878358 0.012664690196804896 0.2528913084878358 0.012664690196804896
+Specificity: 0.9072004016868995 0.007673719631246879 0.9072004016868995 0.007673719631246879
+AUC: 0.9220396512916833 0.007815859259167493 0.9220396512916833 0.007815859259167493
+>>> best model results: sensitivity: 0.664	specificity: 0.937	auc:0.8709532461950257
+>>> best model results: sensitivity: 0.66	specificity: 0.921	auc:0.8735338556421729
+>>> best model results: sensitivity: 0.618	specificity: 0.930	auc:0.8990097556764224
+>>> best model results: sensitivity: 0.612	specificity: 0.931	auc:0.9045073609336876
+Sensitivity: 0.6385664944735493 0.023512542020366994
+Specificity: 0.9296925416684261 0.005705844514942875
+AUC: 0.8870010546118271 0.01491289094512061
+Analyzing the gt file.

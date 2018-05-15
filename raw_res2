@@ -1,0 +1,121 @@
+Analyzing the gt file.
+Not using features: ['cpgName', 'cpgName_split', 'methyMean', 'methyVar']
+Raw data loaded.
+Raw data loaded.
+Start training...
+Model Description:
+ Pipeline(memory=None,
+     steps=[('pca', PCA(copy=True, iterated_power='auto', n_components=22, random_state=None,
+  svd_solver='auto', tol=0.0, whiten=False)), ('ranfor', RandomForestClassifier(bootstrap=True, class_weight='balanced',
+            criterion='gini', max_depth=None, max_features='auto',
+            max_leaf_no...mators=100, n_jobs=1, oob_score=False, random_state=None,
+            verbose=0, warm_start=False))])
+3845 650 1250 1369
+>>> best model results: sensitivity: 0.523	specificity: 0.855	auc:0.8086739285642993
+1328 106 183 258
+>>> test on another dataset: sensitivity: 0.585	specificity: 0.926	auc:0.8926760848458397
+Raw data loaded.
+Raw data loaded.
+Start training...
+Model Description:
+ Pipeline(memory=None,
+     steps=[('pca', PCA(copy=True, iterated_power='auto', n_components=22, random_state=None,
+  svd_solver='auto', tol=0.0, whiten=False)), ('ranfor', RandomForestClassifier(bootstrap=True, class_weight={1: 2, 0: 1},
+            criterion='gini', max_depth=None, max_features='auto',
+            max_leaf_...imators=50, n_jobs=1, oob_score=False, random_state=None,
+            verbose=0, warm_start=False))])
+3788 614 1364 1348
+>>> best model results: sensitivity: 0.497	specificity: 0.861	auc:0.8034923787658869
+1330 114 182 249
+>>> test on another dataset: sensitivity: 0.578	specificity: 0.921	auc:0.901560822926776
+Raw data loaded.
+Raw data loaded.
+Start training...
+Model Description:
+ Pipeline(memory=None,
+     steps=[('pca', PCA(copy=True, iterated_power='auto', n_components=12, random_state=None,
+  svd_solver='auto', tol=0.0, whiten=False)), ('ranfor', RandomForestClassifier(bootstrap=True, class_weight='balanced',
+            criterion='gini', max_depth=None, max_features='auto',
+            max_leaf_no...mators=100, n_jobs=1, oob_score=False, random_state=None,
+            verbose=0, warm_start=False))])
+3776 651 1295 1392
+>>> best model results: sensitivity: 0.518	specificity: 0.853	auc:0.8068219772282428
+1330 110 188 247
+>>> test on another dataset: sensitivity: 0.568	specificity: 0.924	auc:0.8946232439335887
+Raw data loaded.
+Raw data loaded.
+Start training...
+Model Description:
+ Pipeline(memory=None,
+     steps=[('pca', PCA(copy=True, iterated_power='auto', n_components=12, random_state=None,
+  svd_solver='auto', tol=0.0, whiten=False)), ('ranfor', RandomForestClassifier(bootstrap=True, class_weight='balanced',
+            criterion='gini', max_depth=None, max_features='auto',
+            max_leaf_no...mators=100, n_jobs=1, oob_score=False, random_state=None,
+            verbose=0, warm_start=False))])
+3744 642 1306 1422
+>>> best model results: sensitivity: 0.521	specificity: 0.854	auc:0.8097282091244736
+1338 119 180 238
+>>> test on another dataset: sensitivity: 0.569	specificity: 0.918	auc:0.8858956760466713
+Sensitivity: 0.5147699022967063 0.010368991295319622 0.5749885785218838 0.0069160808764724725
+Specificity: 0.855621455196115 0.0029648117807174047 0.9222674903276256 0.002888074403053839
+AUC: 0.8071791234207256 0.00236917284590498 0.8936889569382189 0.005581225296957657
+Not using features: ['cpgName', 'cpgName_split', 'TSS_Distance']
+Raw data loaded.
+Raw data loaded.
+Start training...
+Model Description:
+ Pipeline(memory=None,
+     steps=[('pca', PCA(copy=True, iterated_power='auto', n_components=22, random_state=None,
+  svd_solver='auto', tol=0.0, whiten=False)), ('ranfor', RandomForestClassifier(bootstrap=True, class_weight='balanced',
+            criterion='gini', max_depth=None, max_features='auto',
+            max_leaf_no...mators=100, n_jobs=1, oob_score=False, random_state=None,
+            verbose=0, warm_start=False))])
+3790 588 1345 1391
+>>> best model results: sensitivity: 0.508	specificity: 0.866	auc:0.8083004569631784
+1326 107 189 253
+>>> test on another dataset: sensitivity: 0.572	specificity: 0.925	auc:0.8942998424341555
+Raw data loaded.
+Raw data loaded.
+Start training...
+Model Description:
+ Pipeline(memory=None,
+     steps=[('pca', PCA(copy=True, iterated_power='auto', n_components=12, random_state=None,
+  svd_solver='auto', tol=0.0, whiten=False)), ('ranfor', RandomForestClassifier(bootstrap=True, class_weight='balanced',
+            criterion='gini', max_depth=None, max_features='auto',
+            max_leaf_no...mators=100, n_jobs=1, oob_score=False, random_state=None,
+            verbose=0, warm_start=False))])
+3697 671 1348 1398
+>>> best model results: sensitivity: 0.509	specificity: 0.846	auc:0.8012449927166789
+1345 126 162 242
+>>> test on another dataset: sensitivity: 0.599	specificity: 0.914	auc:0.8941877957340262
+Raw data loaded.
+Raw data loaded.
+Start training...
+Model Description:
+ Pipeline(memory=None,
+     steps=[('pca', PCA(copy=True, iterated_power='auto', n_components=22, random_state=None,
+  svd_solver='auto', tol=0.0, whiten=False)), ('ranfor', RandomForestClassifier(bootstrap=True, class_weight={1: 2, 0: 1},
+            criterion='gini', max_depth=None, max_features='auto',
+            max_leaf_...imators=50, n_jobs=1, oob_score=False, random_state=None,
+            verbose=0, warm_start=False))])
+3757 687 1288 1382
+>>> best model results: sensitivity: 0.518	specificity: 0.845	auc:0.7985879205898118
+1360 112 161 242
+>>> test on another dataset: sensitivity: 0.6	specificity: 0.924	auc:0.8958001807098932
+Raw data loaded.
+Raw data loaded.
+Start training...
+Model Description:
+ Pipeline(memory=None,
+     steps=[('pca', PCA(copy=True, iterated_power='auto', n_components=12, random_state=None,
+  svd_solver='auto', tol=0.0, whiten=False)), ('ranfor', RandomForestClassifier(bootstrap=True, class_weight={1: 2, 0: 1},
+            criterion='gini', max_depth=None, max_features='auto',
+            max_leaf_...mators=100, n_jobs=1, oob_score=False, random_state=None,
+            verbose=0, warm_start=False))])
+3769 641 1289 1415
+>>> best model results: sensitivity: 0.523	specificity: 0.855	auc:0.809293991265145
+1339 121 172 243
+>>> test on another dataset: sensitivity: 0.586	specificity: 0.917	auc:0.9018781977223965
+Sensitivity: 0.5146030992660869 0.006189749265474192 0.5893616344064199 0.011395350995223152
+Specificity: 0.8530332369404632 0.00814256040068759 0.920177946817378 0.004579187747198566
+AUC: 0.8043568403837035 0.004552241262365999 0.8965415041501179 0.003146221912239307

@@ -19,21 +19,14 @@ echo "Reading feature file $featurename."
 echo "Reading cpg file $cpgname."
 
 # unzip feature file to temp folder
-# name=$(basename "$featurename" .imputed.gappedPeak.bed.gPk.gz)
+name=$(basename "$featurename" .imputed.narrowPeak.bed.nPk.gz)
 export savefeaturename=$TEMP_FEATURE/$featurename.bed
 # echo "processing feature:"$featurename
-gzip -dc $FEATURES/$featurename.imputed.gappedPeak.bed.gPk.gz > $savefeaturename
+gzip -dc $FEATURES/$featurename.imputed.narrowPeak.bed.nPk.gz > $savefeaturename
 echo "Saved the intermediate results to "$savefeaturename
 
-################definitely just temporary
-# I just manually created the folder anf save the sorted results to this folder
-export sortedfeaturename=$TEMP_OUTPUT/sortedFeatureFiles/sorted_$featurename.bed
-sort -k1 -k2 -V -s $savefeaturename > $sortedfeaturename
-#############
-
-
 # bedtools_intersect_output
-bedtools intersect -sorted -a $sortedfeaturename -b $cpgfilename -wa -wb > $TEMP_FEATURE/$featurename.bedtoolsIntersect.txt
+bedtools intersect -sorted -a $savefeaturename -b $cpgfilename -wa -wb > $TEMP_FEATURE/$featurename.bedtoolsIntersect.txt
 echo "Saved results to "$TEMP_FEATURE/$featurename.bedtoolsIntersect.txt
 
 # return exit code
@@ -41,4 +34,3 @@ echo "Saved results to "$TEMP_FEATURE/$featurename.bedtoolsIntersect.txt
 
 # remove the bed file
 rm $savefeaturename
-rm $sortedfeaturename

@@ -10,7 +10,7 @@ class directoryBoxy:
                                            'features',
                                            'Roadmap',
                                            'consolidatedImputedGappedPeak')
-        self.cpg_folder = os.path.join(self._data_rootdir,'eqtms','final')
+        self.cpg_folder = os.path.join(self.project_rootdir,'data','eqtmZscores')
         self.cpg_filename = cpg_filename
         self.feature_list_filename = self.cpg_filename+'_featureList'
         self.histone_list_filename = self.cpg_filename+'_histoneList'
@@ -20,7 +20,8 @@ class directoryBoxy:
         self.temp_output = os.path.join(self.project_rootdir,'data','temp')
         self.temp_meta = os.path.join(self.temp_output,'meta')
         self.temp_cpgFolder = os.path.join(self.temp_output,'cpg')
-        self.temp_featureFolder = os.path.join(self.temp_output,'features')
+        self.temp_featureFolder = os.path.join(self.temp_output,'features',
+                                               self.cpg_filename)
         self.temp_overlap = os.path.join(self.temp_output,'overlap',
                                          self.cpg_filename)
         # final results

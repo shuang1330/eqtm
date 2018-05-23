@@ -105,12 +105,61 @@ def readCpgFileInbedToolsFormat(dirs):
                                               sep='\t')
     print('Saved the cpg file in bedtools format in path: \n%s'%cpg_bedtoolFormat_path)
     # check the saved cpg file
-    def check_cpg():Empty
+    def check_cpg():
         check_cpg = pd.read_csv(cpg_bedtoolFormat_path,sep='\t',header=None)
         print('Hey, please check the saved file:\n',check_cpg.head())
-    check_cpg()
+        check_cpg()
     return cpg[['chr','startSite','endSite']].copy()
+    
+def buildRatioMatrix(dirs,histone_list,feature_list,cell_list):
+    # build the overlap ratio matrix
+    cpg_path = os.path.join(dirs.cpg_folder,
+                            dirs.cpg_filename+'.txt')
+    cpg = pd.read_csv(cpg_path,sep='\t')
+    def mapStartEndPosition(row):
+        return cpg['SNPName'][(cpg['SNPChr']==int(row[4][3:]))&\
+        (cpg['SNPChrPos']==row[5]+25)].values[0]
+    res = pd.DataFrame(data=0,
+                       index=cpg['SNPName'],
+                       columns=feature_list,
+                       dtype=np.int8) # boolean/short/..
 
+    for intersect_raw in os.listdir(dirs.temp_featureFolder):
+        intersect_rawPath = os.path.join(dirs.temp_featureFolder,
+                                         intersect_raw)
+        if not isEmpty(intersect_rawPath):
+            print('Processing feature:',intersect_raw)
+            test_intersectFile = pd.read_csv(intersect_rawPath,
+                                             sep='\t',
+                                             header=None)
+            test_intersectFile['featureName'] = '.'.join(intersect_raw.split('.')[:-2])
+            test_intersectFile['cpgName'] = \
+            test_intersectFile.apply(mapStartEndPosition,axis=1)
+            res.loc[test_intersectFile['cpgName'],
+                    test_intersectFile['featureName']]=1
+            save_path = os.path.join(dirs.temp_overlap,
+                                     intersect_raw)
+            test_intersectFile.to_csv(save_path,
+                                      index=False,
+                                      header=False)
+        else:
+            print('Empty File: ',intersect_raw)
+
+    # create the overlapping ratio
+    ratio_table = pd.DataFrame(data=0,
+                               index=cpg['SNPName'],
+                               columns = histone_list,
+                               dtype=np.int8)
+    for histone in histone_list:
+        for feature in res.columns:
+            if histone in feature:
+                ratio_table[histone] += res[feature]/len(cell_list)
+
+    ratio_table_name = dirs.cpg_filename+'_ratioTable'
+    ratio_table_savepath = os.path.join(dirs.output_ratio,ratio_table_name+'.csv')
+    ratio_table.to_csv(ratio_table_savepath,
+                       sep='\t')
+    print("Ratio table saved in path: \n",ratio_table_savepath)
 def callBedtools(dirs,execute_bedtoolFilename,feature_list):
     # call bedtools for intersect files
     cpg_bedtoolFormat_name = dirs.cpg_filename+'_bedtoolsFormat'
@@ -154,11 +203,11 @@ def buildRatioMatrix(dirs,histone_list,feature_list,cell_list):
             test_intersectFile.apply(mapStartEndPosition,axis=1)
             res.loc[test_intersectFile['cpgName'],
                     test_intersectFile['featureName']]=1
-            # save_path = os.path.join(dirs.temp_overlap,
-            #                          intersect_raw)
-            # test_intersectFile.to_csv(save_path,
-            #                           index=False,
-            #                           header=False)
+            save_path = os.path.join(dirs.temp_overlap,
+                                     intersect_raw)
+            test_intersectFile.to_csv(save_path,
+                                      index=False,
+                                      header=False)
         else:
             print('Empty File: ',intersect_raw)
 
@@ -186,5 +235,5 @@ def overlapMatrixPipeline(dirs,execute_bedtoolFilename):
                              feature_list)
     _ = readCpgFileInbedToolsFormat(dirs)
     callBedtools(dirs,execute_bedtoolFilename,feature_list)
-    buildRatioMatrix(dirs,histone_list,feature_list,cell_list)
+    # buildRatioMatrix(dirs,histone_list,feature_list,cell_list)
     print("Finished.")

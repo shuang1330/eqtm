@@ -1,14 +1,14 @@
-import collections
 import numpy as np
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
-
-Datasets = collections.namedtuple('Datasets',['train','test'])
+from lib.read.dataset_class import Datasets, dataset
+import pandas as pd
 
 def check_null(datatable):
     '''
     check and print columns with null values
-    input: dataframe
+    input: pandas dataframe
+    output: print the columns with null values
     '''
     print('Here are columns with NaN values:')
     for col in datatable.columns:
@@ -16,23 +16,32 @@ def check_null(datatable):
         if null > 0:
             print(null, col, datatable[col].dtypes)
 
-def readDataWithRawScore(data_table,label_name,test_size=0.25,normalization=True):
+def readDataWithRawScore(data_table,
+                         label_name='direction',
+                         keep=[],
+                         test_size=0.25,
+                         normalization=True):
     '''
     convert a pandas dataframe data table into Datasets(dataset,dataset)
-    input:pandas dataframe
-          label_name string, the name in dataframe for the label
-          test_size double, default 0.25
-          normalization true/false, default True
-    output:Datasets(train=dataset(x:pandas dataFrame,y:pandas dataFrame),
-                    test=dataset(x:pandas dataFrame,y:pandas dataFrame))
+    INPUT:
+        data_table: pandas dataframe
+        label_name: string, the name in dataframe for the label, default 'direction'
+        keep: list of string, features will not be normalized, default None
+        test_size: float/int, default 0.25
+        normalization: true/false, default True
+    OUTPUT:
+        Datasets(train=dataset(x:pandas dataFrame,y:pandas dataFrame),
+                test=dataset(x:pandas dataFrame,y:pandas dataFrame))
     '''
     train, test = train_test_split(data_table,test_size=test_size)
     copy_train = train.copy().reset_index()
     copy_test = test.copy().reset_index()
+    keep.append(label_name)
     if normalization:
         minMaxScaler = preprocessing.MinMaxScaler()
         numericalCols = [col for col in
-                         train.select_dtypes(exclude=[np.object]).columns]
+                         train.select_dtypes(exclude=[np.object]).columns
+                         if col not in keep]
         train_feature_copy = copy_train.loc[:,numericalCols]
         copy_train.loc[:,numericalCols] = \
         minMaxScaler.fit_transform(train_feature_copy)
@@ -48,76 +57,50 @@ def readDataWithRawScore(data_table,label_name,test_size=0.25,normalization=True
     return Datasets(train=dataset(train_x,train_y),
                     test=dataset(test_x,test_y))
 
-class dataset(object):
+def load_data(path,sep=',',label_name='direction',exclude=[],keep=[],test_size=0.25):
+    '''
+    read from path and convert the csv file into dataset objects
+    INPUT:
+        path: string, path to data, a csv file
+        sep: string, seperator, default ','
+        exclude: list, features will be ignored, default []
+        keep: list, features will be untouched in dataset(train)
+        test_size: float/int, the train_test_split ratio, default 0.25
+    OUTPUT:
+        dataset(train(values,labels), test(values, labels)): self-defined object
+        values, labels: pandas dataframe
+    '''
+    data = pd.read_csv(path,sep=sep,index_col=0)
+    for col in data.columns:
+        data = data.rename(index=str,columns={col:col.split('_')[0]})
 
-    def __init__(self,values,labels,seed=None):
-        '''
-        input values and labels are numpy arrarys,
-        values with shape [num_examples, num_features]
-        labels with shape [num_examples, 1]
-        '''
-        assert values.shape[0] == labels.shape[0]
-        self._num_examples = values.shape[0]
-        self._num_features = values.shape[1]
-
-        self._values = values
-        self._labels = labels
-        self._epochs_completed = 0
-        self._index_in_epoch = 0
-
-    @property
-    def values(self):
-        return self._values
-
-    @property
-    def labels(self):
-        return self._labels
-
-    @property
-    def num_examples(self):
-        return self._num_examples
-
-    @property
-    def num_features(self):
-        return self._num_features
-
-    @property
-    def epochs_completed(self):
-        return self._epochs_completed
-
-    def next_batch(self,batch_size,shuffle=True):
-        '''
-        return the next 'batch_size' examples from this data set.
-        '''
-        start = self._index_in_epoch
-        #shuffle for the first epoch
-        if self._epochs_completed == 0 and start == 0 and shuffle:
-            perm0 = np.arange(self._num_examples)
-            np.random.shuffle(perm0)
-            self._values = self.values[perm0]
-            self._labels = self.labels[perm0]
-        if start + batch_size > self._num_examples:
-            # finish epoch
-            self._epochs_completed += 1
-            # get the rest examples in this epoch
-            rest_num_examples = self._num_examples - start
-            value_rest_part = self._values[start:self._num_examples]
-            label_rest_part = self._labels[start:self._num_examples]
-            # shuffle the dataset
-            if shuffle:
-                perm = np.arange(self._num_examples)
-                np.random.shuffle(perm)
-                self._values = self.values[perm]
-                self._labels = self.labels[perm]
-            # start the new epoch
-            start = 0
-            self._index_in_epoch = batch_size - rest_num_examples
-            end = self._index_in_epoch
-            value_new_part = self._values[start:end]
-            label_new_part = self._labels[start:end]
-            return np.concatenate((value_rest_part,value_new_part),axis=0),\
-            np.concatenate((label_rest_part,label_new_part),axis=0)
+    def binarize(row):
+        if row > 0:
+            return 1
         else:
-            self._index_in_epoch += batch_size
-            end = self._index_in_epoch
-            return self._values[start:end], self._labels[start:end]
+            return 0
+    # add a new column named direction, which binarize the zscore column
+    # positive zscore gets 1 while negative gets 0
+    data[label_name] = data['OverallZScore'].apply(binarize)
+    print('Raw data loaded with shape:',data.shape)
+    # print(data.head())
+    features = [feat for feat in data.columns if feat not in exclude]
+    # print('\n\n\n',keep)
+    dataset = readDataWithRawScore(data[features],
+                                   keep=keep,
+                                   label_name=label_name,
+                                   test_size=test_size)
+    print('Check the null values:')
+    check_null(dataset.train.values)
+    print('Check the loaded dataset: \n train with shape',
+          dataset.train.values.shape)
+    # print(dataset.train.values.head())
+    print('test with shape:',dataset.test.values.shape)
+    # print(dataset.test.values.head())
+    return dataset
+
+
+if __name__ == '__main__':
+    test_filepath = '/groups/umcg-gcc/tmp03/umcg-sli/boxy_eqtm/data/dataReadyForModeling/overlapRatioTssMeanVar/etCpG_withZscoreTss_withMeanVar.csv'
+    keep=['cpgName','cpgName_split','zscore']
+    data = load_data(test_filepath,sep=',',keep=keep,test_size=0.5)

@@ -3,36 +3,40 @@ import os
 # boxy
 
 class directoryBoxy:
-    def __init__(self,PROJECT_DIR,DATA_ROOTDIR,cpg_filename):
+    def __init__(self,PROJECT_DIR,DATA_ROOTDIR,eqtmname=None):
         self.project_rootdir = PROJECT_DIR
         self._data_rootdir = DATA_ROOTDIR
         self.feature_folder = os.path.join(self._data_rootdir,
                                            'features',
                                            'Roadmap',
                                            'consolidatedImputedGappedPeak')
-        self.cpg_folder = os.path.join(self.project_rootdir,'data','eqtmZscores')
-        self.cpg_filename = cpg_filename
-        self.feature_list_filename = self.cpg_filename+'_featureList'
-        self.histone_list_filename = self.cpg_filename+'_histoneList'
-        self.cell_list_filename = self.cpg_filename+'_cellList'
+        self.feature_type = 'imputedGappedPeak'
+        self.feature_filetype = '.imputed.gappedPeak.bed.gPk.gz'
+
+        self.eqtm_folder = os.path.join(self.project_rootdir,'data','eqtmZscores')
+        self.eqtmname = eqtmname
+        self.feature_list_filename = self.feature_type+'_featureList'
+        self.histone_list_filename = self.feature_type+'_histoneList'
+        self.cell_list_filename = self.feature_type+'_cellList'
+
+        self.cpgDir = os.path.join(self.project_rootdir,'data','cpgSites')
+        self.cpgname = 'all_cpgSites'
+        self.geneDir = os.path.join(self.project_rootdir,'data','geneSites')
+        self.genename = 'all_geneSites'
+        self.cpg_bedtoolFormat_filepath = None
 
         # for saving intermediate results
         self.temp_output = os.path.join(self.project_rootdir,'data','temp')
         self.temp_meta = os.path.join(self.temp_output,'meta')
-        self.temp_cpgFolder = os.path.join(self.temp_output,'cpg')
+        # self.temp_eqtmFolder = os.path.join(self.temp_output,'eqtm')
         self.temp_featureFolder = os.path.join(self.temp_output,'features',
-                                               self.cpg_filename)
-        self.temp_overlap = os.path.join(self.temp_output,'overlap',
-                                         self.cpg_filename)
-        # final results
-        self.output_ratio = os.path.join(self.project_rootdir,
-                                         'data','output',
-                                         self.cpg_filename)
+                                               self.feature_type)
 
     def initializeFolders(self):
-        folder_list = [self.temp_output,self.temp_meta,
-                       self.temp_cpgFolder,self.temp_overlap,
-                       self.temp_featureFolder,self.output_ratio]
+
+        folder_list = [self.cpgDir, self.geneDir,
+                       self.temp_output,self.temp_meta,
+                       self.temp_featureFolder]
         for folder in folder_list:
             if not os.path.exists(folder):
                 os.makedirs(folder)

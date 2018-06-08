@@ -2,19 +2,17 @@ import os
 import pandas as pd
 import numpy as np
 
-def read_expression_data(expression_filepath,sep=','):
+def read_expression_data(expression_filepath,sep='\t'):
     '''
     read gene expression file:
     expression-MeanAndVarianceRows.txt
     '''
-    expression = pd.read_csv(expression_filepath,sep=sep,index_col=0)
-    expression_dict = expression_data[['ID','Mean','Var']]
-    .set_index('ID')
-    .T.to_dict('list')
+    expression = pd.read_csv(expression_filepath,sep=sep)
+    expression_dict = expression[['ID','Mean','Var']].set_index('ID').T.to_dict('list')
     return expression_dict
 
 def add_Expression_basedOnProbeName_toEQTMFile(eqtm_filepath,
-                                                 expression_filepath,
+                                                 expression_dict,
                                                  eqtm_savepath):
     '''
     read expression data and add them to the eqtm file based on
@@ -27,7 +25,7 @@ def add_Expression_basedOnProbeName_toEQTMFile(eqtm_filepath,
         eqtm file with gene expression data included: pandas dataFrame
         eqtm file saved in eqtm_savepath
     '''
-    expression_dict = read_expression_data(expression_filepath)
+    # expression_dict = read_expression_data(expression_filepath)
     eqtm = pd.read_csv(eqtm_filepath,sep='\t',index_col=0)
     eqtm['expressionMean'] = [expression_dict[key][0] for key in eqtm['ProbeName'].values]
     eqtm['expressionVar'] = [expression_dict[key][1] for key in eqtm['ProbeName'].values]
@@ -48,7 +46,7 @@ def read_tss_data(tss_filepath):
                           names=colnames,dtype=dtype)
     return tss_raw
 
-def add_TSS_basedOnProbeName_toEQTMFile(eqtm_filepath,tss_filepath,
+def add_TSS_basedOnProbeName_toEQTMFile(eqtm_filepath,tss_raw,
                                       eqtm_savepath=None):
     '''
     add TssDistance to eqtm file
@@ -59,8 +57,7 @@ def add_TSS_basedOnProbeName_toEQTMFile(eqtm_filepath,tss_filepath,
     OUTPUT:
         eQTMs, pandas dataframe
     '''
-    # read the tss file
-    tss_raw = read_tss_data(tss_filepath)
+    # tss_raw = read_tss_data(tss_filepath)
     # reading the eQTMs
     eQTMs = pd.read_csv(eqtm_filepath,sep=',')
 
@@ -120,21 +117,39 @@ def read_methylation_data(methy_filepath):
     return methy_dict
 
 def add_Methy_basedOnSNPName_toEQTMFile(eqtm_filepath,
-                                        methy_filepath,
+                                        methy_dict,
                                         eqtm_savepath):
     '''
     add methylation level to each site
     '''
-    methy_dict = read_methylation_data(methy_filepath)
+    # methy_dict = read_methylation_data(methy_filepath)
     inputfile = pd.read_csv(eqtm_filepath,index_col=0)
     inputfile['SNPName_ProbeName'] = ['{}_{}'.format(row[0],row[1])
                                       for row in inputfile[['SNPName','ProbeName']].values]
     inputfile['methyMean'] = [methy_dict[row][0] for row in inputfile['SNPName'].values]
     inputfile['methyVar'] = [methy_dict[row][1] for row in inputfile['SNPName'].values]
     inputfile.to_csv(eqtm_savepath)
-    print('Eqtm file with gene expressino data, TSS distance and methylation data saved to:',
+    print('Eqtm file with gene expression data, TSS distance and methylation data saved to:',
           eqtm_savepath)
     return inputfile
+
+def add_OverlapRatio_basedOnSNPName_toEQTMFile(eqtm_filename,
+                                               overlap_filepath,
+                                               eqtm_savepath):
+    '''
+    read overlapRatio file and add them to eqtm file
+    '''
+    def read_overlapRatio_data():
+        overlap = pd.read_csv(overlap_filepath,sep='\t',index_col=0)
+        overlap_dict = overlap.T.to_dict()
+        return overlap
+    overlap_dict = read_overlapRatio_data()
+    eqtm_filepath = os.path.join(eqtm_withTSSExpressionMethy_dir,eqtm_filename)
+    eqtm = pd.read_csv(eqtm_filepath,index_col=0)
+    for col in overlap.columns:
+        eqtm[col] = [overlap_dict[row][col] for row in eqtm['SNPName'].values]
+    eqtm.to_csv(eqtm_savepath)
+    return eqtm
 
 
 if __name__=='__main__':
@@ -147,6 +162,7 @@ if __name__=='__main__':
     OUTPUT_EXPRESS_TSS_METHY = os.path.join(EQTM_DATADIR,
                                             'withExpressionTSSMethy')
 
+
     # inputfiles
     eqtm_names = {'2017-12-09-eQTLsFDR-et0.0-flipped.txt':'2017-12-09-eQTLsFDR-et0.0',
                   '2017-12-09-eQTLsFDR-gt0.0-flipped.txt':'2017-12-09-eQTLsFDR-gt0.0',
@@ -155,6 +171,7 @@ if __name__=='__main__':
     # expression data
     expression_filepath = os.path.join(DATA_FOLDER,'features','meanVar',
                                        'expression-MeanAndVarianceRows.txt')
+
 
     # read expression data and add expression to eqtm files
     for filename in eqtm_names.keys():
@@ -167,12 +184,18 @@ if __name__=='__main__':
                                   eqtm_name+'_withExpressionTSS.txt')
         output_expressTssMethy_filepath = os.path.join(OUTPUT_EXPRESS_TSS_METHY,
                                   eqtm_name+'_withExpressionTSSMethy.txt')
+        output_expressTssMethyOverlap_filepath = os.path.join(
+                                  OUTPUT_EXPRESS_TSS_METHY_OVERLAP,
+                                  eqtm_name+'_withExpressionTSSMethyOverlap.txt')
         _ = add_Expression_basedOnProbeName_toEQTMFile(eqtm_filepath,
                                                     expression_filepath,
                                                     output_express_filepath)
         _ = add_TSS_basedOnProbeName_toEQTMFile(output_express_filepath,
                                                 tss_filepath,
                                                 output_expressTss_filepath)
-        _ = add_Methy_basedOnSNPName_toEQTMFile(output_expressTss_filepath,
-                                                tss_filepath,
-                                                output_expressTss_filepath)
+
+
+        # TODO:needs to specify overlap file paths here!!!
+        _ = add_OverlapRatio_basedOnSNPName_toEQTMFile(output_expressTss_filepath,
+                                                overlap_filepath,
+                                                output_expressTssMethy_filepath)

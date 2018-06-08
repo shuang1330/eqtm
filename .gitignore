@@ -13,3 +13,7 @@ checkpoint
 projector/*
 projector_withNonLinear/*
 *.txt
+lib/.ipynb_checkpoints/*
+lib/__pycache__/*
+tools/__pycache__/*
+*.pyc

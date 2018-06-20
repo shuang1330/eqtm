@@ -13,14 +13,16 @@ class directoryBoxy:
         self.feature_type = 'imputedGappedPeak'
         self.feature_filetype = '.imputed.gappedPeak.bed.gPk.gz'
 
-        self.eqtm_folder = os.path.join(self.project_rootdir,'data','eqtmZscores')
+        self.eqtm_folder = os.path.join(self.project_rootdir,
+                                        'data','eqtmZscores','ORIGIN')
         self.eqtmname = eqtmname
         self.feature_list_filename = self.feature_type+'_featureList'
         self.histone_list_filename = self.feature_type+'_histoneList'
         self.cell_list_filename = self.feature_type+'_cellList'
 
-        self.cpgDir = os.path.join(self.project_rootdir,'data','cpgSites')
-        self.cpgname = 'all_cpgSites'
+        self.cpgDir = os.path.join(self.project_rootdir,'data',
+                                   'eqtmZscores','ORIGIN')
+        self.cpgname = 'GenomicCoordinates'
         self.geneDir = os.path.join(self.project_rootdir,'data','geneSites')
         self.genename = 'all_geneSites'
         self.cpg_bedtoolFormat_filepath = None
@@ -30,7 +32,7 @@ class directoryBoxy:
         self.temp_meta = os.path.join(self.temp_output,'meta')
         # self.temp_eqtmFolder = os.path.join(self.temp_output,'eqtm')
         self.temp_featureFolder = os.path.join(self.temp_output,'features',
-                                               self.feature_type)
+                                               self.cpgname)
 
     def initializeFolders(self):
 

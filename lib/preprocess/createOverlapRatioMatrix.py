@@ -80,7 +80,7 @@ def readCellList(temp_meta,cell_list_filename,feature_list):
         print('Saved cell list to path:\n',cell_list_path)
 
     return cell_list
-    
+
 def readCpgFileInBedToolsFormat(dirs):
     cpg_filepath = os.path.join(dirs.cpgDir,dirs.cpgname+'.txt')
     dirs.cpg_bedtoolFormat_filepath = os.path.join(dirs.cpgDir,
@@ -89,7 +89,8 @@ def readCpgFileInBedToolsFormat(dirs):
     with open(cpg_filepath,'r') as cpgFile:
         cpgInfo = [row.strip().split('\t') for row in cpgFile.readlines()[1:]]
         for cpg in cpgInfo:
-            cpg_name,cpg_chr,start,end = cpg[0],'chr'+str(cpg[1]),int(cpg[2])-25,int(cpg[2])+25
+            cpg_name = cpg[0]
+            cpg_chr,start,end = 'chr'+str(cpg[1]),int(cpg[2])-25,int(cpg[2])+25
             cpg_bedtoolFormat.write('{}\t{}\t{}\t{}\n'.format(cpg_chr,start,end,cpg_name))
     cpg_bedtoolFormat.close()
     return cpg_bedtoolFormat

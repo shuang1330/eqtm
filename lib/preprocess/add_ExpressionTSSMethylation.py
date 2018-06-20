@@ -133,24 +133,6 @@ def add_Methy_basedOnSNPName_toEQTMFile(eqtm_filepath,
           eqtm_savepath)
     return inputfile
 
-def add_OverlapRatio_basedOnSNPName_toEQTMFile(eqtm_filename,
-                                               overlap_filepath,
-                                               eqtm_savepath):
-    '''
-    read overlapRatio file and add them to eqtm file
-    '''
-    def read_overlapRatio_data():
-        overlap = pd.read_csv(overlap_filepath,sep='\t',index_col=0)
-        overlap_dict = overlap.T.to_dict()
-        return overlap
-    overlap_dict = read_overlapRatio_data()
-    eqtm_filepath = os.path.join(eqtm_withTSSExpressionMethy_dir,eqtm_filename)
-    eqtm = pd.read_csv(eqtm_filepath,index_col=0)
-    for col in overlap.columns:
-        eqtm[col] = [overlap_dict[row][col] for row in eqtm['SNPName'].values]
-    eqtm.to_csv(eqtm_savepath)
-    return eqtm
-
 
 if __name__=='__main__':
 
@@ -195,7 +177,7 @@ if __name__=='__main__':
                                                 output_expressTss_filepath)
 
 
-        # TODO:needs to specify overlap file paths here!!!
-        _ = add_OverlapRatio_basedOnSNPName_toEQTMFile(output_expressTss_filepath,
-                                                overlap_filepath,
-                                                output_expressTssMethy_filepath)
+        # # TODO:needs to specify overlap file paths here!!!
+        # _ = add_OverlapRatio_basedOnSNPName_toEQTMFile(output_expressTss_filepath,
+        #                                         overlap_filepath,
+        #                                         output_expressTssMethy_filepath)

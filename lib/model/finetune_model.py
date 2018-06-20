@@ -18,11 +18,11 @@ from sklearn import metrics
 from sklearn.metrics import confusion_matrix
 
 
-def examineModel(model_name,trainPath,testPath,savefilename=None,
+def examineModel(model_name,trainPath,testPath,iteration=4,savefilename=None,
                  keep=[],exclude=[],display=True):
     res = {'sensitivity':[],'specificity':[],'auc':[]}
     res2 = {'sensitivity':[],'specificity':[],'auc':[]}
-    for i in range(4):
+    for i in range(iteration):
         data = load_data(trainPath,keep=keep,exclude=exclude)
         features_to_use = [col for col in data.train.values.columns if col not in keep]
         train_data = dataset(data.train.values[features_to_use],
@@ -30,7 +30,9 @@ def examineModel(model_name,trainPath,testPath,savefilename=None,
         valid_data = dataset(data.test.values[features_to_use],
                              data.test.labels.astype('int8'))
 
-        model = choose_model(model_name,len(features_to_use),train.shape[0])
+        model = choose_model(model_name,
+                             len(features_to_use),
+                             train_data.values.shape[0])
         print(model.pipeline, model.param_grid)
         model.savefilename = savefilename
 
@@ -106,8 +108,8 @@ def choose_model(model_name,num_features,num_samples):
                                     KNeighborsClassifier())])
         # train the model!
         n_neighbors = np.arange(5,
-                      int(num_samples/2)),
-                      int((num_samples/2-5)/5))
+                                int(num_samples/2),
+                                int((num_samples/2-5)/5))
         weights = ['uniform','distance']
         param_grid = [{'kneighbor__n_neighbors':n_neighbors,
                        'kneighbor__weights':weights}]

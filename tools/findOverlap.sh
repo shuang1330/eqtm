@@ -15,7 +15,7 @@ export feature_filename=$7
 export feature_type=$8
 
 # handle excepions
-export TEMP_EXCEPTION=$PROJECT_ROOTDIR/data/temp/exception_features/$feature_type
+export TEMP_EXCEPTION=$PROJECT_ROOTDIR/data/temp/exception_features/$featurename
 
 echo "Reading feature file $featurename."
 
@@ -39,6 +39,7 @@ if [ -s $unzipped_feature_filepath ]; then
     echo "Exeption occurs and feature $featurename is moved to $TEMP_EXCEPTION"
   fi
 else
+  cp $unzipped_feature_filepath $TEMP_EXCEPTION/$featurename.bed
   echo "Empty feature file: $unzipped_feature_filepath"
 fi
 

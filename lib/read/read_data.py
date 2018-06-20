@@ -71,8 +71,8 @@ def load_data(path,sep=',',label_name='direction',exclude=[],keep=[],test_size=0
         values, labels: pandas dataframe
     '''
     data = pd.read_csv(path,sep=sep,index_col=0)
-    for col in data.columns:
-        data = data.rename(index=str,columns={col:col.split('_')[0]})
+    # for col in data.columns:
+    #     data = data.rename(index=str,columns={col:col.split('_')[0]})
 
     def binarize(row):
         if row > 0:

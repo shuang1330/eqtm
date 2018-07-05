@@ -9,7 +9,7 @@ class dataset(object):
 
     def __init__(self,values,labels,seed=None):
         '''
-        input values and labels are numpy arrarys,
+        input values and labels are numpy arrays,
         values with shape [num_examples, num_features]
         labels with shape [num_examples, 1]
         '''

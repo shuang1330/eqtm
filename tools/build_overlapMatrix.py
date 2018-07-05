@@ -1,15 +1,14 @@
 import __init__path
-import os
 import argparse
 from lib.preprocess.createOverlapRatioMatrix import overlapMatrixPipeline
 from lib.path.boxyPaths import directoryBoxy
+
 
 def parse_args():
     """
     Parse input arguments
     """
-    parser = argparse.ArgumentParser(description=
-    'Build overlapping ratio matrix for all Roadmap features.')
+    parser = argparse.ArgumentParser(description="Build overlapping ratio matrix for all Roadmap features.")
     parser.add_argument('--rootDir', dest='PROJECT_DIR',
                         help='the project root directory',
                         default=None, type=str)
@@ -25,6 +24,7 @@ def parse_args():
     args = parser.parse_args()
     return args
 
+
 if __name__=='__main__':
 
     args = parse_args()
@@ -32,7 +32,7 @@ if __name__=='__main__':
     print('Called with args:\n')
     print(args)
 
-    dirs = directoryBoxy(args.PROJECT_DIR,args.DATA_ROOTDIR,args.cpg_filename)
+    dirs = directoryBoxy(args.PROJECT_DIR, args.DATA_ROOTDIR, args.cpg_filename)
     dirs.initializeFolders()
 
     overlapMatrixPipeline(dirs, args.execute_bedtoolFilename)

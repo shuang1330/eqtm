@@ -9,12 +9,11 @@ and a classifier (only linear functions,
 
 import pandas as pd
 import numpy as np
-import os
 
 import matplotlib.pyplot as plt
 import matplotlib.pylab as pl
 
-# draw a overlapping bar graph for pandas dataframes
+
 def overlapped_bar(df, show=False, width=0.9, alpha=.3,
                    title='', xlabel='', ylabel='', **plot_kwargs):
     """draw a stacked bar chart except bars on top of
@@ -39,6 +38,7 @@ def overlapped_bar(df, show=False, width=0.9, alpha=.3,
     if show:
         plt.show()
     return plt.gcf()
+
 
 def display_feature_importance(mean_x,x_cls,pca,classifier,LOG_TRANS=True,
                        TABLE=False,DRAW=False,SAVE_DRAW=False):

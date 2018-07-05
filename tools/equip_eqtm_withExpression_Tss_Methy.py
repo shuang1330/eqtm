@@ -11,6 +11,7 @@ add_Methy_basedOnSNPName_toEQTMFile
 import os
 import argparse
 
+
 def parse_args():
     '''
     Parse input arguments
@@ -22,6 +23,7 @@ def parse_args():
                         default=None, type=str)
     args = parser.parse_args()
     return args
+
 
 if __name__=='__main__':
 
@@ -81,7 +83,7 @@ if __name__=='__main__':
         _ = add_Methy_basedOnSNPName_toEQTMFile(output_expressTss_filepath,
                                                 methylation,
                                                 output_expressTssMethy_filepath)
-        _ = add_OverlapRatio_basedOnSNPName_toEQTMFile(
-                                        output_expressTssMethy_filepath,
-                                        overlapRatio_filepath,
-                                        output_expressTssMethyOverlap_filepath)
+        # _ = add_OverlapRatio_basedOnSNPName_toEQTMFile(
+        #                                 output_expressTssMethy_filepath,
+        #                                 overlapRatio_filepath,
+        #                                 output_expressTssMethyOverlap_filepath)

@@ -1,0 +1,23 @@
+Called with args:
+
+Namespace(DATA_DIR='/groups/umcg-gcc/tmp03/umcg-sli/development_eqtm/data')
+Processing file: 2017-12-09-eQTLsFDR-et0.0-flipped.txt
+Saved to path: /groups/umcg-gcc/tmp03/umcg-sli/development_eqtm/data/eqtmZscores/withExpressionData/2017-12-09-eQTLsFDR-et0.0-flipped_withExpression.txt
+Saved eQTM file to:  /groups/umcg-gcc/tmp03/umcg-sli/development_eqtm/data/eqtmZscores/withExpressionTSS/2017-12-09-eQTLsFDR-et0.0-flipped_withExpressionTSS.txt
+Eqtm file with gene expression data, TSS distance and methylation data saved to: /groups/umcg-gcc/tmp03/umcg-sli/development_eqtm/data/eqtmZscores/withExpressionTSSMethy/2017-12-09-eQTLsFDR-et0.0-flipped_withExpressionTSSMethy.txt
+Traceback (most recent call last):
+  File "tools/equip_eqtm_withExpression_Tss_Methy.py", line 84, in <module>
+    _ = add_OverlapRatio_basedOnSNPName_toEQTMFile(
+NameError: name 'add_OverlapRatio_basedOnSNPName_toEQTMFile' is not defined
+Traceback (most recent call last):
+  File "tools/finetune_conv_models.py", line 127, in <module>
+    for filename in os.listdir(data_folder):
+FileNotFoundError: [Errno 2] No such file or directory: '/groups/umcg-gcc/tmp03/umcg-sli/development_eqtm/data/eqtmZscores/final'
+#################################################################################################################
+# Job details recorded by SLURM job epilog using sacct.                                                         #
+#################################################################################################################
+Resources consumed by job 3507635 for user umcg-sli running on compute node umcg-node001:
+================================================================================================================
+JobID          Elapsed   AllocCPUS  AveCPU    ReqMem  MaxVMSize  MaxRSS    MaxDiskRead  MaxDiskWrite
+3507635.batch  00:03:00  2          00:02:12  4000Mc  2289740K   1480787K  557M         4M
+#################################################################################################################

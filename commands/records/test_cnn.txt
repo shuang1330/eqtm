@@ -1,0 +1,1 @@
+step 0, training accuracy 0.37step 100, training accuracy 0.32step 200, training accuracy 0.69

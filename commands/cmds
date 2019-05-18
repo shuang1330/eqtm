@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# interactive node
+srun -N 1 --cpus-per-task=1 --qos=dev --mem=50gb --time=24:00:00 --pty bash
+
+find . -name "*.txt"
+
+cat file1.txt | tail -n+2 >> file2.txt

@@ -29,34 +29,22 @@ if __name__ == "__main__":
     temp_res_dirpath = os.path.join(project_rootdir, "data", "temp", "meta")
     featureList_filepath = os.path.join(temp_res_dirpath, "feature_list.txt")
 
-
     if args.input_type == "promoter":
         # input file as T
         tss_dirpath = os.path.join(project_rootdir, "data", "features", "TSSDistance")
-        tss_raw_filepath = os.path.join(tss_dirpath,
-                                        "Homo_sapiens.GRCh37.71.gtf")
+        tss_raw_filepath = os.path.join(tss_dirpath, "Homo_sapiens.GRCh37.71.gtf")
         tss_file = TSS_file(tss_raw_filepath, sep="\t")
-        gene_startEndSite_savepath = os.path.join(tss_dirpath,
-                                                  'gene_startEndSite.txt')
+        gene_startEndSite_savepath = os.path.join(tss_dirpath, 'gene_startEndSite.txt')
         _ = tss_file.find_allGene_startEndSite(gene_startEndSite_savepath)
 
-        input_bedtoolsformat_filepath = os.path.join(tss_dirpath,
-                                                     "promoter_startEndSite_bedtoolsFormat.txt")
+        input_bedtoolsformat_filepath = os.path.join(tss_dirpath, "promoter_startEndSite_bedtoolsFormat.txt")
         _ = tss_file.promoter_into_bedtoolsFormat(input_bedtoolsformat_filepath)
-    elif args.input_type.startswith("cpg"):
-        cpg_filename = args.cpg_filename
-        input_bedtoolsformat_filepath = os.path.join(project_rootdir,
-                                                     "data",
-                                                     "eqtmZscores",
-                                                     "allCpgs",
-                                                     cpg_filename)
     else:
-        raise IOError("Please specify input_bedtoolsformat_filepath.")
+        cpg_filename = args.cpg_filename
+        input_bedtoolsformat_filepath = os.path.join(project_rootdir, "data", "eqtmZscores", "allCpgs", cpg_filename)
 
     # bedtools bash file
-    findOverlap_path = os.path.join(project_rootdir,
-                                    "tools",
-                                    "findOverlap.sh")
+    findOverlap_path = os.path.join(project_rootdir, "tools", "findOverlap.sh")
     callBedtools(findOverlap_path,
                  project_rootdir,
                  roadmap_feature.feature_dirpath,

@@ -40,17 +40,13 @@ def add_cpg_overlapRatio(eqtm, cpg_overlapRatio_filepath):
 
 def add_tss_distance(eQTMs, gene_site_filepath):
     groupbyTss = pd.read_csv(gene_site_filepath, sep=",", index_col=0)
-
     # add tss sites and tss distance to the eqtm file
     def mapSite(row):
         return groupbyTss.loc[row]['TssSite']
-
     def calculateDis(row):
         return abs(row[0]-row[1])
-
     def findChr(row):
         return groupbyTss.loc[row]['chr']
-
     def checkChr(row):
         if str(row[0])==str(row[1]):
             return True

@@ -42,6 +42,5 @@ else
   echo "Empty feature file saved in: ${unzipped_feature_filepath}"
 fi
 
-
 # remove the bed file
 rm ${unzipped_feature_filepath}

@@ -58,16 +58,9 @@ if __name__ == '__main__':
     data_folder = os.path.join(PROJECT_DIR, 'data', 'temp',
                                'intersect_features', input_dirname)
 
-    ratio_table_savepath = os.path.join(PROJECT_DIR,
-                                        'data',
-                                        'eqtmZscores',
-                                        'allCpgs',
-                                        name+'_overlapRatio.txt')
-    ratio_table_complete_savepath = os.path.join(PROJECT_DIR,
-                                        'data',
-                                        'eqtmZscores',
-                                        'allCpgs',
-                                        name + '_overlapRatio_withoriginalInfo.txt')
+    ratio_table_savepath = os.path.join(PROJECT_DIR, 'data', 'eqtmZscores', 'allCpgs', name+'_overlapRatio.txt')
+    ratio_table_complete_savepath = os.path.join(PROJECT_DIR, 'data', 'eqtmZscores', 'allCpgs',
+                                                 name + '_overlapRatio_withoriginalInfo.txt')
 
     # create the result overlap_matrix
     feature_list = featureList(feature_folder)
@@ -80,7 +73,6 @@ if __name__ == '__main__':
     original_eqtm['chromosome'] = ['chr{}'.format(chrom) for chrom in original_eqtm['SNPChr']]
     original_eqtm["index"] = ["_".join([str(ele) for ele in item]) for item in
                               original_eqtm[["chromosome", "SNPChrPos", "SNPName"]].values]
-
     original_eqtm["index_nr"] = [i for i in range(original_eqtm.shape[0])]
     print(max(original_eqtm['index_nr']))
     print("Original data: ")
@@ -94,10 +86,11 @@ if __name__ == '__main__':
     # original_eqtm_index_dict = original_eqtm[["index", "index_nr"]].set_index("index").T.to_dict()
     print("Converting to dictionary time:", time() - startime)
     print(len(original_eqtm_index_dict.keys()))
+    print(list(original_eqtm_index_dict.keys())[0])
     print(original_eqtm.shape)
 
     names = ['chr_feat', 'str_feat', 'end_feat', 'type',
-             'chr_cpg', 'str_cpg', 'end_cpg', 'rs']
+             'chr_cpg', 'str_cpg', 'end_cpg', 'id']
 
     # start processing
     print('Process features in folder: ', data_folder)
@@ -109,27 +102,27 @@ if __name__ == '__main__':
         histone_dict[histone_list[i]] = i
     file_index = 0
     for filename in os.listdir(data_folder):
-        file_index += 1
-        if file_index%200 ==0:
-            print("Processing feature:", filename, file_index, flush=True)
-        filepath = os.path.join(data_folder, filename)
-        if os.stat(filepath).st_size == 0:
-            print('Empty file:', filename, flush=True)
-            continue
-        else:
-            bedtoolsRes = pd.read_csv(filepath, sep='\t', names=names)
-            bedtoolsRes["original_pos"] = bedtoolsRes["str_cpg"] + 25
-            bedtoolsRes["index_name"] = ["_".join([str(ele) for ele in item]) for item
-                                         in bedtoolsRes[['chr_cpg', 'original_pos', 'rs']].values]
-            bedtoolsRes['featureName'] = '.'.\
-                join(filename.split('.')[:-2])
-
-            row_index = [find_row_index(item) for item in bedtoolsRes["index_name"].values
-                         if not pd.isnull(item)]
-            feature_name = '.'.join(filename.split('.')[:-2])
-            histone_name = feature_name.split("-")[1]
-            histone_index = histone_dict[histone_name]
-            ratio_data[row_index, histone_index] += 1.0/len(cell_type_list)
+        if filename.endswith(".txt"):
+            file_index += 1
+            if file_index % 200 == 0:
+                print("Processing feature:", filename, file_index, flush=True)
+            filepath = os.path.join(data_folder, filename)
+            if os.stat(filepath).st_size == 0:
+                print('Empty file:', filename, flush=True)
+                continue
+            else:
+                bedtoolsRes = pd.read_csv(filepath, sep='\t', names=names)
+                bedtoolsRes["original_pos"] = bedtoolsRes["str_cpg"] + 25
+                bedtoolsRes["index_name"] = ["_".join([str(ele) for ele in item]) for item
+                                             in bedtoolsRes[['chr_cpg', 'original_pos', 'id']].values]
+                bedtoolsRes['featureName'] = '.'.join(filename.split('.')[:-2])
+                row_index = [find_row_index(item) for item in bedtoolsRes["index_name"].values
+                             if not pd.isnull(item)]
+                feature_name = '.'.join(filename.split('.')[:-2])
+                histone_name = feature_name.split("-")[1]
+                histone_index = histone_dict[histone_name]
+                # print(bedtoolsRes["index_name"].values[0], histone_name)
+                ratio_data[row_index, histone_index] += 1.0/len(cell_type_list)
 
     ratio_dataframe = pd.DataFrame(data=ratio_data, index=original_eqtm['index'].unique(), columns=histone_list)
     print(ratio_dataframe.head())
@@ -138,5 +131,3 @@ if __name__ == '__main__':
     # merged_data = pd.concat([ratio_dataframe, original_eqtm], axis=1)
     # print(merged_data.head())
     # merged_data.to_csv(ratio_table_complete_savepath, sep="\t", index=False)
-
-
